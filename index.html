@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My heart ❤️❤️</title>
+  <style>
+    :root{
+      --card:#ffffffcc;
+    }
+    html,body{
+      height:100%;margin:0;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      direction:rtl;
+    }
+    body{
+      /* ===== ضع هنا رابط أو اسم صورة الخلفية =====
+         مثال: url('bg.jpg') أو رابط كامل من الإنترنت
+      */
+      background: url('مم.jpg') no-repeat center center / cover;
+      background-color: transparent;
+      background-blend-mode: normal;
+
+      display:flex;align-items:center;justify-content:center;
+      padding:20px;
+    }
+    .wrap{
+      width:100%;
+      max-width:420px;
+      background:var(--card);
+      border-radius:22px;
+      box-shadow:0 12px 30px rgba(0,0,0,0.12);
+      padding:22px;
+      position:relative;
+      overflow:hidden;
+      text-align:center;
+    }
+    .hint{
+      font-size:18px;
+      font-weight:bold;
+      color:#E60000;
+      margin-bottom:8px;
+      position: relative;
+      z-index: 12;
+      transition: opacity 0.4s ease;
+    }
+    .heart-btn{
+      width:260px;
+      height:260px;
+      background:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin:0 auto 10px auto;
+      cursor:pointer;
+      transition:transform .18s ease;
+      z-index: 11;
+      position: relative;
+    }
+    .heart-btn:active{transform:scale(0.96)}
+    svg{width:100%;height:100%}
+    .message{
+      font-size:22px;
+      font-weight:bold;
+      color:#FF1493;
+      opacity:0;
+      transition:opacity .4s ease;
+      position:relative;
+      z-index:12;
+    }
+    .message.show{
+      opacity:1;
+    }
+    .floating-layer{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:1;
+    }
+    .balloon,.tiny-heart{
+      position:absolute;
+      bottom:-140px;
+      opacity:0;
+    }
+    @keyframes float-up{
+      0%{transform:translateY(0);opacity:0}
+      10%{opacity:1}
+      100%{transform:translateY(-120vh);opacity:0}
+    }
+    @keyframes heart-float{
+      0%{transform:translateY(0) scale(0.8) rotate(0);opacity:0}
+      10%{opacity:1}
+      100%{transform:translateY(-80vh) scale(1.2) rotate(30deg);opacity:0}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hint" id="hintText">دوس علي القلب يقلبي 🙈🙈</div>
+    <div class="heart-btn" id="heartBtn" role="button" tabindex="0" aria-label="زر القلب">
+      <svg viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="gradHeart" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stop-color="#FF4D4D"/>
+            <stop offset="50%" stop-color="#E60000"/>
+            <stop offset="100%" stop-color="#990000"/>
+          </linearGradient>
+          <radialGradient id="shine" cx="30%" cy="30%" r="50%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.8)"/>
+            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+          </radialGradient>
+        </defs>
+        <path d="M100 170s-60-35-80-70 0-70 40-70 40 30 40 30 0-30 40-30 60 35 40 70-80 70-80 70z" 
+          fill="url(#gradHeart)" stroke="#800000" stroke-width="2"/>
+        <ellipse cx="70" cy="60" rx="40" ry="25" fill="url(#shine)" />
+      </svg>
+    </div>
+    <div class="message" id="message">كل سنه وانتي طيبه يقلبي وعقبال مليون سنه واحنا اصحاب وحبايب كده علطول ونفضل مع بعض علطول يقلبي 😘😘</div>
+    <div class="floating-layer" id="floatingLayer"></div>
+  </div>
+
+  <script>
+    const heartBtn = document.getElementById('heartBtn');
+    const msg = document.getElementById('message');
+    const hint = document.getElementById('hintText');
+    const layer = document.getElementById('floatingLayer');
+
+    let balloonInterval = null;
+    let heartInterval = null;
+
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function makeBalloon() {
+      const b = document.createElement('div');
+      b.className = 'balloon';
+      b.style.left = random(0, layer.clientWidth - 40) + 'px';
+      b.style.width = '40px';
+      b.style.height = '60px';
+      b.style.background = `hsl(${Math.floor(random(0, 360))},80%,70%)`;
+      b.style.borderRadius = '50%';
+      b.style.animation = `float-up ${random(5, 9)}s linear forwards`;
+      layer.appendChild(b);
+      setTimeout(() => b.remove(), 10000);
+    }
+
+    function makeHeart() {
+      const h = document.createElement('div');
+      h.className = 'tiny-heart';
+      const size = random(20, 40);
+      h.innerHTML = `<svg viewBox="0 0 24 24" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg"><path d="M12 21s-7-4.35-9-7.5C-0.5 8 6 3 8 6c1.2 1.8 4 4 4 4s2.8-2.2 4-4c2-3 8.5 2 5 7.5C19 16.65 12 21 12 21z" fill="#FF0000"/></svg>`;
+      h.style.left = random(0, layer.clientWidth - size) + 'px';
+      h.style.animation = `heart-float ${random(4, 7)}s ease-in forwards`;
+      layer.appendChild(h);
+      setTimeout(() => h.remove(), 8000);
+    }
+
+    // ===== إنشاء عنصر الصوت =====
+    const heartSound = new Audio();
+    // ===== ضع هنا رابط ملف الصوت =====
+    // مثال: 'sound.mp3' أو رابط مباشر لملف صوت
+    heartSound.src = 'ممم.mp3';
+    heartSound.load();
+
+    heartBtn.onclick = () => {
+      hint.style.opacity = 0;
+      msg.classList.add('show');
+
+      if (!balloonInterval && !heartInterval) {
+        balloonInterval = setInterval(makeBalloon, 600);
+        heartInterval = setInterval(makeHeart, 800);
+      }
+
+      heartSound.currentTime = 0; // اعادة الصوت من البداية اذا ضغطت اكتر من مرة
+      heartSound.play().catch(error => {
+        console.log('Error playing sound:', error);
+      });
+    };
+
+    // لتشغيل الصوت بالكيبورد (اختياري)
+    heartBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        heartBtn.click();
+      }
+    });
+  </script>
+</body>
+</html>
